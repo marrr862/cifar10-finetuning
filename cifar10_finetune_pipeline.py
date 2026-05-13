@@ -21,9 +21,7 @@ from torchvision.models import ResNet18_Weights, VGG16_Weights
 from sklearn.metrics import accuracy_score, precision_recall_fscore_support, classification_report, confusion_matrix
 
 
-# =========================
-# CONFIG
-# =========================
+ #CONFIG #
 SEED = 42
 DATA_DIR = "./data"
 OUTPUT_DIR = "./outputs"
@@ -38,9 +36,8 @@ DEVICE = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 os.makedirs(OUTPUT_DIR, exist_ok=True)
 
 
-# =========================
 # REPRODUCIBILITY
-# =========================
+
 def set_seed(seed: int = 42):
     random.seed(seed)
     np.random.seed(seed)
@@ -53,18 +50,18 @@ def set_seed(seed: int = 42):
 set_seed(SEED)
 
 
-# =========================
+
 # LABELS
-# =========================
+
 CIFAR10_CLASSES = [
     "airplane", "automobile", "bird", "cat", "deer",
     "dog", "frog", "horse", "ship", "truck"
 ]
 
 
-# =========================
+
 # DATA
-# =========================
+
 def get_transforms(img_size: int = 224):
     train_transform = transforms.Compose([
         transforms.Resize((img_size, img_size)),
@@ -124,9 +121,9 @@ def get_dataloaders(batch_size: int, img_size: int = 224):
     return train_loader, val_loader, test_loader
 
 
-# =========================
+
 # MODELS
-# =========================
+
 def build_model(model_name: str, freeze_backbone: bool = False):
     model_name = model_name.lower()
 
@@ -158,9 +155,9 @@ def build_model(model_name: str, freeze_backbone: bool = False):
     return model.to(DEVICE)
 
 
-# =========================
+
 # METRICS
-# =========================
+
 def compute_metrics(y_true, y_pred) -> Dict:
     acc = accuracy_score(y_true, y_pred)
     precision_macro, recall_macro, f1_macro, _ = precision_recall_fscore_support(
@@ -180,9 +177,9 @@ def compute_metrics(y_true, y_pred) -> Dict:
     }
 
 
-# =========================
+
 # TRAIN / EVAL
-# =========================
+
 def train_one_epoch(model, loader, criterion, optimizer):
     model.train()
     running_loss = 0.0
@@ -228,9 +225,9 @@ def evaluate(model, loader, criterion):
     return epoch_loss, metrics, labels_all, preds_all
 
 
-# =========================
+
 # PLOTS
-# =========================
+
 def plot_history(history, save_path):
     epochs = range(1, len(history["train_loss"]) + 1)
 
@@ -257,9 +254,9 @@ def plot_history(history, save_path):
     plt.close()
 
 
-# =========================
+
 # EXPERIMENT
-# =========================
+
 def run_experiment(model_name: str, lr: float, batch_size: int, epochs: int, weight_decay: float, freeze_backbone: bool):
     print("=" * 80)
     print(f"Running experiment: model={model_name}, lr={lr}, batch_size={batch_size}, epochs={epochs}, weight_decay={weight_decay}, freeze_backbone={freeze_backbone}")
